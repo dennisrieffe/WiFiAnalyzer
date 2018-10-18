@@ -1,12 +1,12 @@
 package com.rieffe.wifianalyzer;
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ListView;
+import android.view.View;
+import android.widget.Button;
 
-
-import java.util.ArrayList;
 
 
 
@@ -16,17 +16,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        fillStruct();
+        setApp();
     }
 
-    public void fillStruct(){
-        final ArrayList<AP> allAP = new ArrayList<>();
-        ListView TaskListView = (ListView) findViewById(R.id.list);
+    public void setApp() {
+        Button setList = (Button) findViewById(R.id.btn_to_list);
+        setList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ListAP.class);
+                startActivity(intent);
+            }
+        });
 
-        allAP.add(new AP("a","5","c"));
-        APAdapter adapter = new APAdapter(this, allAP);
-        TaskListView.setAdapter(adapter);
+        Button deviceInformation = (Button) findViewById(R.id.btn_to_device_information);
+        deviceInformation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NetworkInformation.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
 }

@@ -5,19 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".NetworkInformation">
 
-    <Button
-        android:id="@+id/btn_to_list"
+    <TextView
+        android:id="@+id/device_ip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="To List" />
+        android:padding="16dp" />
 
-    <Button
-        android:id="@+id/btn_to_device_information"
+    <TextView
+        android:id="@+id/device_frequency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="To Device Information" />
-
+        android:padding="16dp" />
 
 </LinearLayout>
