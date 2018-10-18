@@ -25,7 +25,9 @@ public class NetworkInformation extends AppCompatActivity {
 
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String USGS_REQUEST_URL = "http://api.ipstack.com/137.48.255.15?access_key=d183cd125e247c6ceda65043430b4eb4";
+    private static final String USGS_REQUEST_URL = "https://api.ipify.org/?format=json";
+
+    //http://api.ipstack.com/137.48.255.15?access_key=d183cd125e247c6ceda65043430b4eb4
 
 
     @Override
