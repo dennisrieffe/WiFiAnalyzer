@@ -25,7 +25,7 @@ public class NetworkInformation extends AppCompatActivity {
 
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String USGS_REQUEST_URL = "https://api.ipify.org/?format=json";
+    private static final String USGS_REQUEST_URL = "http://api.ipstack.com/137.48.255.15?access_key=d183cd125e247c6ceda65043430b4eb4";
 
 
     @Override
@@ -51,9 +51,9 @@ public class NetworkInformation extends AppCompatActivity {
         ipFrequency.setText(frequencyString);
     }
 
-    private void updateUi(PublicIP earthquake) {
+    private void updateUi(PublicIP IP) {
         TextView titleTextView = (TextView) findViewById(R.id.device_public_ip);
-        titleTextView.setText(earthquake.getIP());
+        titleTextView.setText(IP.getIP());
 
     }
 
@@ -151,7 +151,7 @@ public class NetworkInformation extends AppCompatActivity {
                 String IP = baseJsonResponse.getString("ip");
                 return new PublicIP(IP);
             } catch (JSONException e) {
-                Log.e(LOG_TAG, "Problem parsing the earthquake JSON results", e);
+                Log.e(LOG_TAG, "Problem parsing the JSON results", e);
             }
             return null;
         }
