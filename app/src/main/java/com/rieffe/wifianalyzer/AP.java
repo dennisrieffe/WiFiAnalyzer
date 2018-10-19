@@ -1,7 +1,6 @@
 package com.rieffe.wifianalyzer;
 
 class AP {
-
     private final String BSSID;
     private final String RSSI;
     private final String SSID;

@@ -50,6 +50,7 @@ public class NetworkInformation extends AppCompatActivity {
         String gateway = "";
         String serverAdress = "";
         String RSSI = "";
+
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         try {
             ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
