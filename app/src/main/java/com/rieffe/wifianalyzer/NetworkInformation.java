@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.os.AsyncTask;
 
@@ -20,45 +21,76 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 public class NetworkInformation extends AppCompatActivity {
 
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String USGS_REQUEST_URL = "https://api.ipify.org/?format=json";
-
-    //http://api.ipstack.com/137.48.255.15?access_key=d183cd125e247c6ceda65043430b4eb4
-
+    private static final String USGS_REQUEST_URL = "https://ipleak.net/json/";
+    private final ArrayList<IPInfo> ipInfo = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network_information);
-        setInformation();
+
         TsunamiAsyncTask task = new TsunamiAsyncTask();
         task.execute();
-
     }
 
-    public void setInformation() {
+    private void setInformation(PublicIP IP) {
+        ListView TaskListView = (ListView) findViewById(R.id.list_network);
+        String ip;
+        String frequencyString;
+        String DNS = "";
+        String SSID = "";
+        String BSSID = "";
+        String netmask = "";
+        String gateway = "";
+        String serverAdress = "";
+        String RSSI = "";
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        String ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-        int frequency = wm.getConnectionInfo().getFrequency();
+        try {
+            ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
+            DNS = Formatter.formatIpAddress(wm.getDhcpInfo().dns1);
+            frequencyString = stringbuilder(wm.getConnectionInfo().getFrequency());
+            SSID = wm.getConnectionInfo().getSSID();
+            BSSID = wm.getConnectionInfo().getBSSID();
+            netmask = Formatter.formatIpAddress(wm.getDhcpInfo().netmask);
+            gateway = Formatter.formatIpAddress(wm.getDhcpInfo().gateway);
+            serverAdress = Formatter.formatIpAddress(wm.getDhcpInfo().serverAddress);
+            RSSI = stringbuilder(wm.getConnectionInfo().getRssi());
+
+        } catch (Exception e) {
+            ip = "No valid ip found";
+            frequencyString = "No valid frequency found";
+        }
+        ipInfo.add(new IPInfo("Ip Adress", ip));
+        ipInfo.add(new IPInfo("Frequency", frequencyString));
+        ipInfo.add(new IPInfo("DNS", DNS));
+        ipInfo.add(new IPInfo("SSID", SSID));
+        ipInfo.add(new IPInfo("BSSID", BSSID));
+        ipInfo.add(new IPInfo("Public IP", IP.getIP()));
+        ipInfo.add(new IPInfo("Country", IP.getCountry()));
+        ipInfo.add(new IPInfo("Region", IP.getRegion()));
+        ipInfo.add(new IPInfo("City", IP.getCity()));
+        ipInfo.add(new IPInfo("Gateway", gateway));
+        ipInfo.add(new IPInfo("Netmask", netmask));
+        ipInfo.add(new IPInfo("Server Adress", serverAdress));
+        ipInfo.add(new IPInfo("RSSI", RSSI));
+        IPAdapter adapter = new IPAdapter(this, ipInfo);
+        TaskListView.setAdapter(adapter);
+
+    }
+
+    private String stringbuilder(int info) {
+        String newString;
         StringBuilder sb = new StringBuilder();
-        sb.append(frequency);
-        String frequencyString = sb.toString();
-        TextView ipText = (TextView) findViewById(R.id.device_ip);
-        ipText.setText(ip);
-        TextView ipFrequency = (TextView) findViewById(R.id.device_frequency);
-        ipFrequency.setText(frequencyString);
+        sb.append(info);
+        newString = sb.toString();
+        return newString;
     }
-
-    private void updateUi(PublicIP IP) {
-        TextView titleTextView = (TextView) findViewById(R.id.device_public_ip);
-        titleTextView.setText(IP.getIP());
-
-    }
-
     private class TsunamiAsyncTask extends AsyncTask<URL, Void, PublicIP> {
 
         @Override
@@ -80,8 +112,7 @@ public class NetworkInformation extends AppCompatActivity {
             if (IP == null) {
                 return;
             }
-
-            updateUi(IP);
+            setInformation(IP);
         }
 
         private URL createUrl(String stringUrl) {
@@ -151,7 +182,10 @@ public class NetworkInformation extends AppCompatActivity {
             try {
                 JSONObject baseJsonResponse = new JSONObject(IPJSON);
                 String IP = baseJsonResponse.getString("ip");
-                return new PublicIP(IP);
+                String country = baseJsonResponse.getString("country_name");
+                String region = baseJsonResponse.getString("region_name");
+                String city = baseJsonResponse.getString("city_name");
+                return new PublicIP(IP, country, region, city);
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Problem parsing the JSON results", e);
             }
@@ -161,14 +195,33 @@ public class NetworkInformation extends AppCompatActivity {
 
     public class PublicIP {
 
-        public final String IP;
+        private final String IP;
+        private final String country;
+        private final String region;
+        private final String city;
 
-        public PublicIP(String _ip) {
+        public PublicIP(String _ip, String _country, String _region, String _city) {
             IP = _ip;
+            country = _country;
+            region = _region;
+            city = _city;
         }
 
         public String getIP() {
             return IP;
         }
+
+        public String getCity() {
+            return city;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public String getRegion() {
+            return region;
+        }
     }
+
 }
