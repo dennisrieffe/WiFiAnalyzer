@@ -28,7 +28,10 @@ public class APAdapter extends ArrayAdapter<AP>{
         TextView SSIDTextView = (TextView) listItemView.findViewById(R.id.SSID);
         SSIDTextView.setText(currentAP.getSSID());
         TextView RSSITextView = (TextView) listItemView.findViewById(R.id.RSSI);
-        RSSITextView.setText(currentAP.getRSSI());
+        StringBuilder sb = new StringBuilder();
+        sb.append(currentAP.getRSSI());
+        String newString = sb.toString();
+        RSSITextView.setText(newString);
         TextView BSSIDTextView = (TextView) listItemView.findViewById(R.id.BSSID);
         BSSIDTextView.setText(currentAP.getBSSID());
         return listItemView;
