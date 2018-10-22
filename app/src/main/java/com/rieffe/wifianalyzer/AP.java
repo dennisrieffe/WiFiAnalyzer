@@ -3,7 +3,7 @@ package com.rieffe.wifianalyzer;
 class AP {
     private final String BSSID;
     private final int RSSI;
-    private final String SSID;
+    private String SSID;
 
     public AP(String BSSID, int RSSI, String SSID) {
         this.BSSID = BSSID;
@@ -21,5 +21,9 @@ class AP {
 
     public int getRSSI() {
         return RSSI;
+    }
+
+    public void setSSID(String newSSID) {
+        SSID = newSSID;
     }
 }
