@@ -35,7 +35,7 @@ public class NetworkInformation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_network_information);
 
-        TsunamiAsyncTask task = new TsunamiAsyncTask();
+        InfoAsyncTask task = new InfoAsyncTask();
         task.execute();
     }
 
@@ -92,7 +92,8 @@ public class NetworkInformation extends AppCompatActivity {
         newString = sb.toString();
         return newString;
     }
-    private class TsunamiAsyncTask extends AsyncTask<URL, Void, PublicIP> {
+
+    private class InfoAsyncTask extends AsyncTask<URL, Void, PublicIP> {
 
         @Override
         protected PublicIP doInBackground(URL... urls) {

@@ -4,11 +4,13 @@ class AP {
     private final String BSSID;
     private final int RSSI;
     private String SSID;
+    private String capabilities;
 
-    public AP(String BSSID, int RSSI, String SSID) {
+    public AP(String BSSID, int RSSI, String SSID, String capabilities) {
         this.BSSID = BSSID;
         this.RSSI = RSSI;
         this.SSID = SSID;
+        this.capabilities = capabilities;
     }
 
     public String getBSSID() {
@@ -25,5 +27,9 @@ class AP {
 
     public void setSSID(String newSSID) {
         SSID = newSSID;
+    }
+
+    public String getCapabilities() {
+        return capabilities;
     }
 }

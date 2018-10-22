@@ -14,4 +14,11 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="textStyle" parent="AppTheme">
+        <item name="android:textColor">@color/textcolor</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:paddingLeft">8dp</item>
+    </style>
+
 </resources>

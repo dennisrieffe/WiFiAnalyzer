@@ -42,7 +42,13 @@ public class ListAP extends AppCompatActivity {
             unregisterReceiver(this);
 
             for (ScanResult scanResult : results) {
-                temp.add(new AP(scanResult.SSID, scanResult.level, scanResult.BSSID));
+                //TODO find the correct name for this one
+                if (scanResult.SSID.contains("Find the correct name")) {
+                    temp.add(new AP(scanResult.BSSID, scanResult.level, "Hidden SSID", scanResult.capabilities));
+                } else {
+                    temp.add(new AP(scanResult.BSSID, scanResult.level, scanResult.SSID, scanResult.capabilities));
+                }
+
                 APAdapter.notifyDataSetChanged();
             }
             Collections.sort(temp, new Comparator<AP>() {
@@ -53,12 +59,6 @@ public class ListAP extends AppCompatActivity {
             });
             allAP.clear();
             allAP.addAll(temp);
-
-//            for (int i = 0; i < allAP.size(); i++) {
-//                if (allAP.get(i).getSSID().isEmpty() || allAP.get(i).getSSID().equals("")) {
-//                    allAP.get(i).setSSID("Hidden SSID");
-//                }
-//            }
 
         }
     };
