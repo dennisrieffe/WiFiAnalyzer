@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
@@ -19,13 +18,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NetworkInformation extends AppCompatActivity {
-
-
+    
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String USGS_REQUEST_URL = "https://ipleak.net/json/";
     private final ArrayList<IPInfo> ipInfo = new ArrayList<>();
@@ -40,116 +42,103 @@ public class NetworkInformation extends AppCompatActivity {
     }
 
     private void setInformation(PublicIP IP) {
-        ListView TaskListView = (ListView) findViewById(R.id.list_network);
-        String ip;
-        String frequencyString;
-        String DNS = "";
-        String SSID = "";
-        String BSSID = "";
-        String netmask = "";
-        String gateway = "";
-        String serverAdress = "";
-        String RSSI = "";
-
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-        try {
-            ip = Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress());
-            DNS = Formatter.formatIpAddress(wm.getDhcpInfo().dns1);
-            frequencyString = stringbuilder(wm.getConnectionInfo().getFrequency());
-            SSID = wm.getConnectionInfo().getSSID();
-            BSSID = wm.getConnectionInfo().getBSSID();
-            netmask = Formatter.formatIpAddress(wm.getDhcpInfo().netmask);
-            gateway = Formatter.formatIpAddress(wm.getDhcpInfo().gateway);
-            serverAdress = Formatter.formatIpAddress(wm.getDhcpInfo().serverAddress);
-            RSSI = stringbuilder(wm.getConnectionInfo().getRssi());
 
-        } catch (Exception e) {
-            ip = "No valid ip found";
-            frequencyString = "No valid frequency found";
+        if (wm == null) {
+            ipInfo.add(new IPInfo("IP Address", "No valid ip found"));
+            ipInfo.add(new IPInfo("Frequency", "No valid frequency found"));
+            ipInfo.add(new IPInfo("DNS", ""));
+            ipInfo.add(new IPInfo("SSID", ""));
+            ipInfo.add(new IPInfo("BSSID", ""));
+            ipInfo.add(new IPInfo("Gateway", ""));
+            ipInfo.add(new IPInfo("Netmask", ""));
+            ipInfo.add(new IPInfo("Server Address", ""));
+            ipInfo.add(new IPInfo("RSSI", ""));
+        } else {
+            ipInfo.add(new IPInfo("IP Address", Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress())));
+            ipInfo.add(new IPInfo("Frequency", stringBuilder(wm.getConnectionInfo().getFrequency())));
+            ipInfo.add(new IPInfo("DNS", Formatter.formatIpAddress(wm.getDhcpInfo().dns1)));
+            ipInfo.add(new IPInfo("SSID", wm.getConnectionInfo().getSSID()));
+            ipInfo.add(new IPInfo("BSSID", wm.getConnectionInfo().getBSSID()));
+            ipInfo.add(new IPInfo("Gateway", Formatter.formatIpAddress(wm.getDhcpInfo().gateway)));
+            ipInfo.add(new IPInfo("Netmask", Formatter.formatIpAddress(wm.getDhcpInfo().netmask)));
+            ipInfo.add(new IPInfo("Server Address", Formatter.formatIpAddress(wm.getDhcpInfo().serverAddress)));
+            ipInfo.add(new IPInfo("RSSI", stringBuilder(wm.getConnectionInfo().getRssi())));
         }
-        ipInfo.add(new IPInfo("Ip Adress", ip));
-        ipInfo.add(new IPInfo("Frequency", frequencyString));
-        ipInfo.add(new IPInfo("DNS", DNS));
-        ipInfo.add(new IPInfo("SSID", SSID));
-        ipInfo.add(new IPInfo("BSSID", BSSID));
-        ipInfo.add(new IPInfo("Public IP", IP.getIP()));
-        ipInfo.add(new IPInfo("Country", IP.getCountry()));
-        ipInfo.add(new IPInfo("Region", IP.getRegion()));
-        ipInfo.add(new IPInfo("City", IP.getCity()));
-        ipInfo.add(new IPInfo("Gateway", gateway));
-        ipInfo.add(new IPInfo("Netmask", netmask));
-        ipInfo.add(new IPInfo("Server Adress", serverAdress));
-        ipInfo.add(new IPInfo("RSSI", RSSI));
-        IPAdapter adapter = new IPAdapter(this, ipInfo);
-        TaskListView.setAdapter(adapter);
 
+        ipInfo.add(new IPInfo("Public IP", IP.getCity()));
+        ipInfo.add(new IPInfo("Country", IP.getCity()));
+        ipInfo.add(new IPInfo("Region", IP.getCity()));
+        ipInfo.add(new IPInfo("City", IP.getCity()));
+
+        ((ListView) findViewById(R.id.list_network))
+                .setAdapter(new IPAdapter(this, ipInfo));
     }
 
-    private String stringbuilder(int info) {
-        String newString;
-        StringBuilder sb = new StringBuilder();
-        sb.append(info);
-        newString = sb.toString();
-        return newString;
+    private String stringBuilder(int info) {
+        return Integer.toString(info);
     }
 
     private class InfoAsyncTask extends AsyncTask<URL, Void, PublicIP> {
 
         @Override
         protected PublicIP doInBackground(URL... urls) {
-            URL url = createUrl(USGS_REQUEST_URL);
-            String jsonResponse = "";
             try {
-                jsonResponse = makeHttpRequest(url);
+                return extractFeatureFromJson(
+                        makeHttpRequest(
+                                createUrl()));
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error with creating URL", e);
+                return extractFeatureFromJson("");
             }
-            PublicIP IP = extractFeatureFromJson(jsonResponse);
-            return IP;
         }
-
 
         @Override
         protected void onPostExecute(PublicIP IP) {
-            if (IP == null) {
-                return;
+            if (IP != null) {
+                setInformation(IP);
             }
-            setInformation(IP);
         }
 
-        private URL createUrl(String stringUrl) {
-            URL url = null;
+        private URL createUrl() {
             try {
-                url = new URL(stringUrl);
+                return new URL(NetworkInformation.USGS_REQUEST_URL);
             } catch (MalformedURLException exception) {
                 Log.e(LOG_TAG, "Error with creating URL", exception);
                 return null;
             }
-            return url;
         }
 
         private String makeHttpRequest(URL url) throws IOException {
-            String jsonResponse = "";
-
             if (url == null) {
-                return jsonResponse;
+                return "";
             }
+
             HttpURLConnection urlConnection = null;
             InputStream inputStream = null;
+
             try {
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setReadTimeout(10000 /* milliseconds */);
                 urlConnection.setConnectTimeout(15000 /* milliseconds */);
                 urlConnection.connect();
+
                 if (urlConnection.getResponseCode() == 200) {
                     inputStream = urlConnection.getInputStream();
-                    jsonResponse = readFromStream(inputStream);
+                    return readFromStream(inputStream);
                 }
-
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "The message was " + urlConnection.getResponseCode());
+            } catch (ProtocolException e) {
+                Log.e(LOG_TAG, "Unable to set GET request method.");
                 e.printStackTrace();
+
+                return null;
+            } catch (IOException e) {
+                Log.e(LOG_TAG, urlConnection == null
+                        ? "Error. Unable to retrieve message."
+                        : "The message was " + urlConnection.getResponseCode());
+                e.printStackTrace();
+
                 return null;
             } finally {
                 if (urlConnection != null) {
@@ -159,38 +148,43 @@ public class NetworkInformation extends AppCompatActivity {
                     inputStream.close();
                 }
             }
-            return jsonResponse;
+
+            return "";
         }
 
         private String readFromStream(InputStream inputStream) throws IOException {
-            StringBuilder output = new StringBuilder();
-            if (inputStream != null) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
-                BufferedReader reader = new BufferedReader(inputStreamReader);
-                String line = reader.readLine();
-                while (line != null) {
-                    output.append(line);
-                    line = reader.readLine();
-                }
+            if (inputStream == null) {
+                return "";
             }
+
+            StringBuilder output = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+            String line = reader.readLine();
+
+            while (line != null) {
+                output.append(line);
+                line = reader.readLine();
+            }
+
             return output.toString();
         }
 
         private PublicIP extractFeatureFromJson(String IPJSON) {
-
             if (TextUtils.isEmpty(IPJSON)) {
                 return null;
             }
+
             try {
                 JSONObject baseJsonResponse = new JSONObject(IPJSON);
-                String IP = baseJsonResponse.getString("ip");
-                String country = baseJsonResponse.getString("country_name");
-                String region = baseJsonResponse.getString("region_name");
-                String city = baseJsonResponse.getString("city_name");
-                return new PublicIP(IP, country, region, city);
+
+                return new PublicIP(baseJsonResponse.getString("ip"),
+                        baseJsonResponse.getString("country_name"),
+                        baseJsonResponse.getString("region_name"),
+                        baseJsonResponse.getString("city_name"));
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Problem parsing the JSON results", e);
             }
+
             return null;
         }
     }
@@ -226,4 +220,15 @@ public class NetworkInformation extends AppCompatActivity {
         }
     }
 
+    public static <T> Collector<T, ?, T> toSingleton() {
+        return Collectors.collectingAndThen(
+                Collectors.toList(),
+                list -> {
+                    if (list.size() != 1) {
+                        throw new IllegalStateException();
+                    }
+                    return list.get(0);
+                }
+        );
+    }
 }

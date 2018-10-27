@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class APAdapter extends ArrayAdapter<AP>{
+public class APAdapter extends ArrayAdapter<AP> {
 
     public APAdapter(Activity context, ArrayList<AP> task) {
         super(context, 0, task);
@@ -20,26 +20,24 @@ public class APAdapter extends ArrayAdapter<AP>{
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View listItemView = convertView;
+
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
+
         AP currentAP = getItem(position);
 
-        TextView SSIDTextView = (TextView) listItemView.findViewById(R.id.SSID);
-        SSIDTextView.setText("SSID: " + currentAP.getSSID());
-        TextView RSSITextView = (TextView) listItemView.findViewById(R.id.RSSI);
-        StringBuilder sb = new StringBuilder();
-        sb.append(currentAP.getRSSI());
-        String newString = sb.toString();
-        RSSITextView.setText("RSSI: " + newString);
-        TextView BSSIDTextView = (TextView) listItemView.findViewById(R.id.BSSID);
-        BSSIDTextView.setText("MAC: " + currentAP.getBSSID());
-        TextView capabilitiesTextView = (TextView) listItemView.findViewById(R.id.capabilities);
-        capabilitiesTextView.setText("Encryption Method: " + currentAP.getCapabilities());
+        if (currentAP != null) {
+            ((TextView) listItemView.findViewById(R.id.SSID))
+                    .setText("SSID: " + currentAP.getSSID());
+            ((TextView) listItemView.findViewById(R.id.RSSI))
+                    .setText("RSSI: " + currentAP.getRSSI());
+            ((TextView) listItemView.findViewById(R.id.BSSID))
+                    .setText("MAC: " + currentAP.getBSSID());
+            ((TextView) listItemView.findViewById(R.id.capabilities))
+                    .setText("Encryption Method: " + currentAP.getCapabilities());
+        }
+
         return listItemView;
-
     }
-
-
-
 }

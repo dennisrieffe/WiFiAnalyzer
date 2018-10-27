@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class IPAdapter extends ArrayAdapter<IPInfo> {
 
-
     public IPAdapter(Activity context, ArrayList<IPInfo> task) {
         super(context, 0, task);
     }
@@ -21,16 +20,20 @@ public class IPAdapter extends ArrayAdapter<IPInfo> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View listItemView = convertView;
+
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_current_network, parent, false);
         }
+
         IPInfo currentIP = getItem(position);
-        TextView infoTextView = (TextView) listItemView.findViewById(R.id.network_info);
-        infoTextView.setText(currentIP.getInfo());
-        TextView dataTextView = (TextView) listItemView.findViewById(R.id.network_data);
-        dataTextView.setText(currentIP.getData());
+
+        if (currentIP != null) {
+            ((TextView) listItemView.findViewById(R.id.network_info))
+                    .setText(currentIP.getInfo());
+            ((TextView) listItemView.findViewById(R.id.network_data))
+                    .setText(currentIP.getData());
+        }
+
         return listItemView;
-
     }
-
 }

@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 
 
-
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -20,23 +18,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setApp() {
-        Button setList = (Button) findViewById(R.id.btn_to_list);
-        setList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListAP.class);
-                startActivity(intent);
-            }
-        });
+        findViewById(R.id.btn_to_list)
+                .setOnClickListener(v -> startActivity(
+                        new Intent(MainActivity.this, ListAP.class)));
 
-        Button deviceInformation = (Button) findViewById(R.id.btn_to_device_information);
-        deviceInformation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NetworkInformation.class);
-                startActivity(intent);
-            }
-        });
+        findViewById(R.id.btn_to_device_information)
+                .setOnClickListener(v -> startActivity(
+                        new Intent(MainActivity.this, NetworkInformation.class)));
     }
 
 
