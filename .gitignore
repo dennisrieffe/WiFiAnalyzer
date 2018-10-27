@@ -6,6 +6,7 @@
 /.idea/workspace.xml
 /.idea/kotlinc.xml
 /.idea/saveactions_settings.xml
+/.idea/caches/
 .DS_Store
 /build
 /captures
