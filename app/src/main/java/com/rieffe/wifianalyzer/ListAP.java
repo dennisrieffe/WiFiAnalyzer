@@ -45,11 +45,11 @@ public class ListAP extends AppCompatActivity {
                         ? "Hidden SSID"
                         : scanResult.SSID;
 
-                temp.add(new AP(scanResult.BSSID, scanResult.level, SSID, scanResult.capabilities));
+                temp.add(new AP(scanResult.BSSID, -scanResult.level, SSID, scanResult.capabilities));
                 APAdapter.notifyDataSetChanged();
             });
 
-            temp.sort((ap, t1) -> t1.getRSSI() - ap.getRSSI());
+            temp.sort((ap, t1) -> ap.getRSSI() - t1.getRSSI());
             allAP.clear();
             allAP.addAll(temp);
         }

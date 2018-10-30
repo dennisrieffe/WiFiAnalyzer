@@ -5,4 +5,15 @@
     <color name="colorAccent">#FF4081</color>
     <color name="background">#8bb3f4</color>
     <color name="textcolor">#042254</color>
+
+    <color name="rssi10">#4A7BA7</color>
+    <color name="rssi9">#04B4B3</color>
+    <color name="rssi8">#10CAC9</color>
+    <color name="rssi7">#F5A623</color>
+    <color name="rssi6">#FF7D50</color>
+    <color name="rssi5">#FC6644</color>
+    <color name="rssi4">#E75F40</color>
+    <color name="rssi3">#E13A20</color>
+    <color name="rssi2">#D93218</color>
+    <color name="rssi1">#C03823</color>
 </resources>
