@@ -66,9 +66,9 @@ public class NetworkInformation extends AppCompatActivity {
             ipInfo.add(new IPInfo("RSSI", stringBuilder(wm.getConnectionInfo().getRssi())));
         }
 
-        ipInfo.add(new IPInfo("Public IP", IP.getCity()));
-        ipInfo.add(new IPInfo("Country", IP.getCity()));
-        ipInfo.add(new IPInfo("Region", IP.getCity()));
+        ipInfo.add(new IPInfo("Public IP", IP.getIP()));
+        ipInfo.add(new IPInfo("Country", IP.getCountry()));
+        ipInfo.add(new IPInfo("Region", IP.getRegion()));
         ipInfo.add(new IPInfo("City", IP.getCity()));
 
         ((ListView) findViewById(R.id.list_network))
