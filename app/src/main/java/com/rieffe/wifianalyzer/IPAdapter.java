@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class IPAdapter extends ArrayAdapter<IPInfo> {
         IPInfo currentIP = getItem(position);
 
         if (currentIP != null) {
+            ((ImageView) listItemView.findViewById(R.id.list_picture))
+                    .setImageResource(currentIP.getPicture());
             ((TextView) listItemView.findViewById(R.id.network_info))
                     .setText(currentIP.getInfo());
             ((TextView) listItemView.findViewById(R.id.network_data))

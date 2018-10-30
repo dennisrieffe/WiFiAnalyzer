@@ -45,31 +45,31 @@ public class NetworkInformation extends AppCompatActivity {
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 
         if (wm == null) {
-            ipInfo.add(new IPInfo("IP Address", "No valid ip found"));
-            ipInfo.add(new IPInfo("Frequency", "No valid frequency found"));
-            ipInfo.add(new IPInfo("DNS", ""));
-            ipInfo.add(new IPInfo("SSID", ""));
-            ipInfo.add(new IPInfo("BSSID", ""));
-            ipInfo.add(new IPInfo("Gateway", ""));
-            ipInfo.add(new IPInfo("Netmask", ""));
-            ipInfo.add(new IPInfo("Server Address", ""));
-            ipInfo.add(new IPInfo("RSSI", ""));
+            ipInfo.add(new IPInfo("IP Address", "No valid ip found", 0));
+            ipInfo.add(new IPInfo("Frequency", "No valid frequency found", 0));
+            ipInfo.add(new IPInfo("DNS", "", 0));
+            ipInfo.add(new IPInfo("SSID", "", 0));
+            ipInfo.add(new IPInfo("BSSID", "", 0));
+            ipInfo.add(new IPInfo("Gateway", "", 0));
+            ipInfo.add(new IPInfo("Netmask", "", 0));
+            ipInfo.add(new IPInfo("Server Address", "", 0));
+            ipInfo.add(new IPInfo("RSSI", "", 0));
         } else {
-            ipInfo.add(new IPInfo("IP Address", Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress())));
-            ipInfo.add(new IPInfo("Frequency", stringBuilder(wm.getConnectionInfo().getFrequency())));
-            ipInfo.add(new IPInfo("DNS", Formatter.formatIpAddress(wm.getDhcpInfo().dns1)));
-            ipInfo.add(new IPInfo("SSID", wm.getConnectionInfo().getSSID()));
-            ipInfo.add(new IPInfo("BSSID", wm.getConnectionInfo().getBSSID()));
-            ipInfo.add(new IPInfo("Gateway", Formatter.formatIpAddress(wm.getDhcpInfo().gateway)));
-            ipInfo.add(new IPInfo("Netmask", Formatter.formatIpAddress(wm.getDhcpInfo().netmask)));
-            ipInfo.add(new IPInfo("Server Address", Formatter.formatIpAddress(wm.getDhcpInfo().serverAddress)));
-            ipInfo.add(new IPInfo("RSSI", stringBuilder(wm.getConnectionInfo().getRssi())));
+            ipInfo.add(new IPInfo("IP Address", Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()), R.drawable.ip));
+            ipInfo.add(new IPInfo("Frequency", stringBuilder(wm.getConnectionInfo().getFrequency()), R.drawable.frequency));
+            ipInfo.add(new IPInfo("DNS", Formatter.formatIpAddress(wm.getDhcpInfo().dns1), R.drawable.dns));
+            ipInfo.add(new IPInfo("SSID", wm.getConnectionInfo().getSSID(), R.drawable.ssid));
+            ipInfo.add(new IPInfo("BSSID", wm.getConnectionInfo().getBSSID(), R.drawable.mac));
+            ipInfo.add(new IPInfo("Gateway", Formatter.formatIpAddress(wm.getDhcpInfo().gateway), R.drawable.gateway));
+            ipInfo.add(new IPInfo("Netmask", Formatter.formatIpAddress(wm.getDhcpInfo().netmask), R.drawable.netmask));
+            ipInfo.add(new IPInfo("Server Address", Formatter.formatIpAddress(wm.getDhcpInfo().serverAddress), R.drawable.server));
+            ipInfo.add(new IPInfo("RSSI", stringBuilder(wm.getConnectionInfo().getRssi()), R.drawable.rssi));
         }
 
-        ipInfo.add(new IPInfo("Public IP", IP.getIP()));
-        ipInfo.add(new IPInfo("Country", IP.getCountry()));
-        ipInfo.add(new IPInfo("Region", IP.getRegion()));
-        ipInfo.add(new IPInfo("City", IP.getCity()));
+        ipInfo.add(new IPInfo("Public IP", IP.getIP(), R.drawable.public_ip));
+        ipInfo.add(new IPInfo("Country", IP.getCountry(), R.drawable.country));
+        ipInfo.add(new IPInfo("Region", IP.getRegion(), R.drawable.region));
+        ipInfo.add(new IPInfo("City", IP.getCity(), R.drawable.city));
 
         ((ListView) findViewById(R.id.list_network))
                 .setAdapter(new IPAdapter(this, ipInfo));
