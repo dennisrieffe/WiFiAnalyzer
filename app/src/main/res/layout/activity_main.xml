@@ -4,19 +4,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundApp"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btn_to_list"
+    <TextView
+        android:id="@+id/introduction"
+        style="@style/textStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="To List" />
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="36dp"
+        android:gravity="center"
+        android:text="WiFi Analyzer app by \nDennis Rieffe and Jason Stratman"
+        android:textSize="20sp" />
+
+
+    <TextView
+        android:id="@+id/project"
+        style="@style/textStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="36dp"
+        android:gravity="center"
+        android:text="Project for CSCI8620 \nUniversity of Nebraska Omaha"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_to_list"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/buttonshape"
+        android:gravity="center"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="-1"
+        android:shadowDy="-1"
+        android:shadowRadius="5"
+        android:text="To the list"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/btn_to_device_information"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonshape"
+        android:gravity="center"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="-1"
+        android:shadowDy="-1"
+        android:shadowRadius="5"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
         android:text="To Device Information" />
 
 

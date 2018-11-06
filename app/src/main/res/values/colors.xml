@@ -16,4 +16,5 @@
     <color name="rssi3">#E13A20</color>
     <color name="rssi2">#D93218</color>
     <color name="rssi1">#C03823</color>
+    <color name="backgroundApp">#FFF7DA</color>
 </resources>
