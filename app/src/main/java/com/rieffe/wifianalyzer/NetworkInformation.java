@@ -1,5 +1,7 @@
 package com.rieffe.wifianalyzer;
 
+import android.content.Context;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,9 @@ import android.os.AsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.net.ConnectivityManager;
+import android.telephony.TelephonyManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,13 +29,13 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class NetworkInformation extends AppCompatActivity {
-    
+
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String USGS_REQUEST_URL = "https://ipleak.net/json/";
     private final ArrayList<IPInfo> ipInfo = new ArrayList<>();
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,55 @@ public class NetworkInformation extends AppCompatActivity {
 
         InfoAsyncTask task = new InfoAsyncTask();
         task.execute();
+    }
+
+    public static NetworkInfo getNetworkInfo(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo();
+    }
+
+    public static String whatConnection(int type, int subType) {
+        if (type == ConnectivityManager.TYPE_WIFI) {
+            return "WiFi";
+        } else if (type == ConnectivityManager.TYPE_MOBILE) {
+            switch (subType) {
+                case TelephonyManager.NETWORK_TYPE_1xRTT:
+                    return "1xRRT"; // ~ 50-100 kbps
+                case TelephonyManager.NETWORK_TYPE_CDMA:
+                    return "CDMA"; // ~ 14-64 kbps
+                case TelephonyManager.NETWORK_TYPE_EDGE:
+                    return "EDGE"; // ~ 50-100 kbps
+                case TelephonyManager.NETWORK_TYPE_EVDO_0:
+                    return "EVDO"; // ~ 400-1000 kbps
+                case TelephonyManager.NETWORK_TYPE_EVDO_A:
+                    return "EVDO"; // ~ 600-1400 kbps
+                case TelephonyManager.NETWORK_TYPE_GPRS:
+                    return "GPRS"; // ~ 100 kbps
+                case TelephonyManager.NETWORK_TYPE_HSDPA:
+                    return "HSDPA"; // ~ 2-14 Mbps
+                case TelephonyManager.NETWORK_TYPE_HSPA:
+                    return "HSPA"; // ~ 700-1700 kbps
+                case TelephonyManager.NETWORK_TYPE_HSUPA:
+                    return "HSUPA"; // ~ 1-23 Mbps
+                case TelephonyManager.NETWORK_TYPE_UMTS:
+                    return "UMTS"; // ~ 400-7000 kbps
+                case TelephonyManager.NETWORK_TYPE_EHRPD:
+                    return "EHRPD"; // ~ 1-2 Mbps
+                case TelephonyManager.NETWORK_TYPE_EVDO_B:
+                    return "EVDO_B"; // ~ 5 Mbps
+                case TelephonyManager.NETWORK_TYPE_HSPAP:
+                    return "HSPAP"; // ~ 10-20 Mbps
+                case TelephonyManager.NETWORK_TYPE_IDEN:
+                    return "IDEN"; // ~25 kbps
+                case TelephonyManager.NETWORK_TYPE_LTE:
+                    return "LTE"; // ~ 10+ Mbps
+                case TelephonyManager.NETWORK_TYPE_UNKNOWN:
+                default:
+                    return "Unknown";
+            }
+        } else {
+            return "Incorrect connection";
+        }
     }
 
     private void setInformation(PublicIP IP) {
@@ -54,6 +108,9 @@ public class NetworkInformation extends AppCompatActivity {
             ipInfo.add(new IPInfo("Netmask", "", 0));
             ipInfo.add(new IPInfo("Server Address", "", 0));
             ipInfo.add(new IPInfo("RSSI", "", 0));
+            ipInfo.add(new IPInfo("Connection Type", "", 0));
+            ipInfo.add(new IPInfo("Connection Name", " ", 0));
+
         } else {
             ipInfo.add(new IPInfo("IP Address", Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()), R.drawable.ip));
             ipInfo.add(new IPInfo("Frequency", stringBuilder(wm.getConnectionInfo().getFrequency()), R.drawable.frequency));
@@ -64,8 +121,9 @@ public class NetworkInformation extends AppCompatActivity {
             ipInfo.add(new IPInfo("Netmask", Formatter.formatIpAddress(wm.getDhcpInfo().netmask), R.drawable.netmask));
             ipInfo.add(new IPInfo("Server Address", Formatter.formatIpAddress(wm.getDhcpInfo().serverAddress), R.drawable.server));
             ipInfo.add(new IPInfo("RSSI", stringBuilder(wm.getConnectionInfo().getRssi()), R.drawable.rssi));
+            ipInfo.add(new IPInfo("Connection Type", whatConnection(getNetworkInfo(context).getType(), getNetworkInfo(context).getSubtype()), R.drawable.connection));
+            ipInfo.add(new IPInfo("Connection name", getNetworkInfo(context).getExtraInfo(), R.drawable.name));
         }
-
         ipInfo.add(new IPInfo("Public IP", IP.getIP(), R.drawable.public_ip));
         ipInfo.add(new IPInfo("Country", IP.getCountry(), R.drawable.country));
         ipInfo.add(new IPInfo("Region", IP.getRegion(), R.drawable.region));
