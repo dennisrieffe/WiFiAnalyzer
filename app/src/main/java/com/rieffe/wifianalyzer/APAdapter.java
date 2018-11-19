@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class APAdapter extends ArrayAdapter<AP> {
 
@@ -21,28 +22,29 @@ public class APAdapter extends ArrayAdapter<AP> {
 
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        View listItemView = convertView;
-        if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
-        }
-        AP currentAP = getItem(position);
-        if (currentAP != null) {
-            ((TextView) listItemView.findViewById(R.id.SSID))
-                    .setText("SSID: " + currentAP.getSSID());
-            ((TextView) listItemView.findViewById(R.id.BSSID))
-                    .setText("MAC: " + currentAP.getBSSID());
-            ((TextView) listItemView.findViewById(R.id.capabilities))
-                    .setText("EM: " + currentAP.getCapabilities());
-            TextView RSSITextView = (TextView) listItemView.findViewById(R.id.RSSI);
-            ((GradientDrawable) RSSITextView.getBackground()).
-                    setColor(getRSSIColor(currentAP.getRSSI()));
-            RSSITextView.setText("" + currentAP.getRSSI());
-        }
+        View listItemView = Optional.ofNullable(convertView)
+                .orElse(LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false));
+
+        Optional.ofNullable(getItem(position))
+                .ifPresent(currentAP -> {
+                    ((TextView) listItemView.findViewById(R.id.SSID))
+                            .setText("SSID: " + currentAP.getSSID());
+                    ((TextView) listItemView.findViewById(R.id.BSSID))
+                            .setText("MAC: " + currentAP.getBSSID());
+                    ((TextView) listItemView.findViewById(R.id.capabilities))
+                            .setText("EM: " + currentAP.getCapabilities());
+                    TextView RSSITextView = listItemView.findViewById(R.id.RSSI);
+                    ((GradientDrawable) RSSITextView.getBackground()).
+                            setColor(getRSSIColor(currentAP.getRSSI()));
+                    RSSITextView.setText("" + currentAP.getRSSI());
+                });
+
         return listItemView;
     }
 
     private int getRSSIColor(int RSSI) {
         int RSSIID;
+
         if (RSSI > 1 && RSSI <= 40) {
             RSSIID = R.color.rssi1;
         } else if (RSSI > 40 && RSSI <= 45) {
@@ -64,6 +66,7 @@ public class APAdapter extends ArrayAdapter<AP> {
         } else {
             RSSIID = R.color.rssi10;
         }
+        
         return ContextCompat.getColor(getContext(), RSSIID);
     }
 
