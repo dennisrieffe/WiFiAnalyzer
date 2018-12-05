@@ -11,31 +11,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class ListAP extends AppCompatActivity {
 
     final ArrayList<AP> allAP = new ArrayList<>();
-    private WifiManager wifiManager;
+    private @Nullable WifiManager wifiManager;
     private APAdapter APAdapter;
 
     BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
@@ -53,7 +43,7 @@ public class ListAP extends AppCompatActivity {
                 APAdapter.notifyDataSetChanged();
             });
 
-            temp.sort((ap, t1) -> ap.getRSSI() - t1.getRSSI());
+            temp.sort(Comparator.comparingInt(AP::getRSSI));
             allAP.clear();
             allAP.addAll(temp);
         }
@@ -87,7 +77,11 @@ public class ListAP extends AppCompatActivity {
     private void startScan() {
         allAP.clear();
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        wifiManager.startScan();
+
+        if (wifiManager != null) {
+            wifiManager.startScan();
+        }
+
         Toast.makeText(this, "Performing scan", Toast.LENGTH_SHORT).show();
     }
 

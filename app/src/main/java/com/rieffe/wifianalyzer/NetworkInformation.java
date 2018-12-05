@@ -6,21 +6,20 @@ The Class resposible to scrapp all available information
  */
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.widget.ListView;
-import android.os.AsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.net.ConnectivityManager;
-import android.telephony.TelephonyManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,8 +31,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class NetworkInformation extends AppCompatActivity {
 
@@ -119,7 +116,6 @@ public class NetworkInformation extends AppCompatActivity {
             ipInfo.add(new IPInfo("RSSI", "", 0));
             ipInfo.add(new IPInfo("Connection Type", "", 0));
             ipInfo.add(new IPInfo("Connection Name", " ", 0));
-
         } else {
             ipInfo.add(new IPInfo("IP Address", Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()), R.drawable.ip));
             ipInfo.add(new IPInfo("Frequency", stringBuilder(wm.getConnectionInfo().getFrequency()), R.drawable.frequency));
@@ -133,6 +129,7 @@ public class NetworkInformation extends AppCompatActivity {
             ipInfo.add(new IPInfo("Connection Type", whatConnection(getNetworkInfo(context).getType(), getNetworkInfo(context).getSubtype()), R.drawable.connection));
             ipInfo.add(new IPInfo("Connection name", getNetworkInfo(context).getExtraInfo(), R.drawable.name));
         }
+
         ipInfo.add(new IPInfo("Public IP", IP.getIP(), R.drawable.public_ip));
         ipInfo.add(new IPInfo("Country", IP.getCountry(), R.drawable.country));
         ipInfo.add(new IPInfo("Region", IP.getRegion(), R.drawable.region));
@@ -287,17 +284,5 @@ public class NetworkInformation extends AppCompatActivity {
         public String getRegion() {
             return region;
         }
-    }
-
-    public static <T> Collector<T, ?, T> toSingleton() {
-        return Collectors.collectingAndThen(
-                Collectors.toList(),
-                list -> {
-                    if (list.size() != 1) {
-                        throw new IllegalStateException();
-                    }
-                    return list.get(0);
-                }
-        );
     }
 }
