@@ -1,5 +1,10 @@
 package com.rieffe.wifianalyzer;
 
+/*
+Within this class a broadcast receiver is used to scan for the wifi results which are then added to the APAdapter
+ */
+
+
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -39,9 +44,8 @@ public class ListAP extends AppCompatActivity {
             List<AP> temp = new ArrayList<>();
             unregisterReceiver(this);
 
-            //TODO find the correct name for this one
             wifiManager.getScanResults().forEach(scanResult -> {
-                String SSID = scanResult.SSID.contains("Find the correct name")
+                String SSID = scanResult.SSID.contains("")
                         ? "Hidden SSID"
                         : scanResult.SSID;
 
@@ -55,6 +59,8 @@ public class ListAP extends AppCompatActivity {
         }
     };
 
+
+    //With the aid of Wifi Manager are the current available networks collected and sent to the APAdapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +83,7 @@ public class ListAP extends AppCompatActivity {
         ((ListView) findViewById(R.id.list)).setAdapter(APAdapter);
     }
 
+    //Method to initiate a new scan.
     private void startScan() {
         allAP.clear();
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));

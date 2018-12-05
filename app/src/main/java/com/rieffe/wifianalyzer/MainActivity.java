@@ -8,6 +8,18 @@ import android.view.View;
 import android.widget.Button;
 
 
+/*
+Dennis Rieffe & Jason Stratman
+Group project CSCI8620
+
+University of Nebraska Omaha
+
+The development of an WiFi Analyzer App
+
+
+MainActivity that shows the first view
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

@@ -1,5 +1,9 @@
 package com.rieffe.wifianalyzer;
 
+/*
+This class extends the ArrayAdapter class and overrides multiple methods to set lay out of different views for the available wifi networks.
+ */
+
 import android.app.Activity;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
@@ -13,6 +17,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+
+//This method sets the network information of one specific AP.
 public class APAdapter extends ArrayAdapter<AP> {
 
     public APAdapter(Activity context, ArrayList<AP> AP) {
@@ -41,6 +47,7 @@ public class APAdapter extends ArrayAdapter<AP> {
         return listItemView;
     }
 
+    //A method to determine the color of the circle based on the RSSI
     private int getRSSIColor(int RSSI) {
         int RSSIID;
         if (RSSI > 1 && RSSI <= 40) {

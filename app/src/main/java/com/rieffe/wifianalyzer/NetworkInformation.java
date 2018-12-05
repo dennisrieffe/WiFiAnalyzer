@@ -1,5 +1,10 @@
 package com.rieffe.wifianalyzer;
 
+
+/*
+The Class resposible to scrapp all available information
+ */
+
 import android.content.Context;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -46,11 +51,14 @@ public class NetworkInformation extends AppCompatActivity {
         task.execute();
     }
 
+
+    //Creation of a connectivity manager for the non wifi information
     public static NetworkInfo getNetworkInfo(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo();
     }
 
+    //A switch statement to determine what the network connection is=
     public static String whatConnection(int type, int subType) {
         if (type == ConnectivityManager.TYPE_WIFI) {
             return "WiFi";
@@ -95,6 +103,7 @@ public class NetworkInformation extends AppCompatActivity {
         }
     }
 
+    //This methods gathers all the information from WifiManager and ConnecivityManager and adds this to one ArrayList
     private void setInformation(PublicIP IP) {
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 
@@ -137,6 +146,8 @@ public class NetworkInformation extends AppCompatActivity {
         return Integer.toString(info);
     }
 
+
+    //TODO could you do this one. It is a bit too long ago
     private class InfoAsyncTask extends AsyncTask<URL, Void, PublicIP> {
 
         @Override
