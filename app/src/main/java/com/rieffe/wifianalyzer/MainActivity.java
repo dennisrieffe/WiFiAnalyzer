@@ -4,18 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-/*
-Dennis Rieffe & Jason Stratman
-Group project CSCI8620
-
-University of Nebraska Omaha
-
-The development of an WiFi Analyzer App
-
-
-MainActivity that shows the first view
+/**
+ * Dennis Rieffe & Jason Stratman
+ * Group Project CSCI 8620-001
+ * Fall 2018
+ * University of Nebraska at Omaha
+ * Wi-Fi Analyzer App
+ * <p>
+ * The main activity shows the first view of the app.
  */
-
 public class MainActivity extends AppCompatActivity {
 
     @Override

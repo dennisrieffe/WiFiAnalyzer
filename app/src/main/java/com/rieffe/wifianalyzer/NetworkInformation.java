@@ -1,10 +1,5 @@
 package com.rieffe.wifianalyzer;
 
-
-/*
-The Class resposible to scrapp all available information
- */
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -32,6 +27,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+/**
+ * Responsible for retrieval of all available networking information.
+ */
 public class NetworkInformation extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -48,14 +46,24 @@ public class NetworkInformation extends AppCompatActivity {
         task.execute();
     }
 
-
-    //Creation of a connectivity manager for the non wifi information
+    /**
+     * Creates a connectivity manager for all non Wi-Fi information.
+     *
+     * @param context - The environment context. Provides the system service.
+     * @return - The retrieved network info.
+     */
     public static NetworkInfo getNetworkInfo(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo();
     }
 
-    //A switch statement to determine what the network connection is=
+    /**
+     * Given a type and subtype, determines what sort of network connection is being used.
+     *
+     * @param type    - The type of connectivity manager.
+     * @param subType - The type of telephony manager.
+     * @return - String description of the connection type.
+     */
     public static String whatConnection(int type, int subType) {
         if (type == ConnectivityManager.TYPE_WIFI) {
             return "WiFi";
@@ -100,7 +108,12 @@ public class NetworkInformation extends AppCompatActivity {
         }
     }
 
-    //This methods gathers all the information from WifiManager and ConnecivityManager and adds this to one ArrayList
+    /**
+     * Gathers all information from WifiManager and ConnectivityManager and adds to a single
+     * ArrayList.
+     *
+     * @param IP - The public IP information.
+     */
     private void setInformation(PublicIP IP) {
         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
 
@@ -139,12 +152,20 @@ public class NetworkInformation extends AppCompatActivity {
                 .setAdapter(new IPAdapter(this, ipInfo));
     }
 
+    /**
+     * Converts integer to string.
+     *
+     * @param info - The integer to be converted.
+     * @return - The string.
+     */
     private String stringBuilder(int info) {
         return Integer.toString(info);
     }
 
 
-    //TODO could you do this one. It is a bit too long ago
+    /**
+     * Handles all of the network information retrieval tasks.
+     */
     private class InfoAsyncTask extends AsyncTask<URL, Void, PublicIP> {
 
         @Override
@@ -159,6 +180,11 @@ public class NetworkInformation extends AppCompatActivity {
             }
         }
 
+        /**
+         * Sets the network information after the PublicIP data is retrieved.
+         *
+         * @param IP - The public IP object.
+         */
         @Override
         protected void onPostExecute(PublicIP IP) {
             if (IP != null) {
@@ -166,6 +192,11 @@ public class NetworkInformation extends AppCompatActivity {
             }
         }
 
+        /**
+         * Creates a network information request URL.
+         *
+         * @return - The URL.
+         */
         private URL createUrl() {
             try {
                 return new URL(NetworkInformation.USGS_REQUEST_URL);
@@ -175,6 +206,13 @@ public class NetworkInformation extends AppCompatActivity {
             }
         }
 
+        /**
+         * Makes an HTTP GET request to the specified URL.
+         *
+         * @param url - The URL to make the request to.
+         * @return - The string response.
+         * @throws IOException - Exception thrown if the request fails.
+         */
         private String makeHttpRequest(URL url) throws IOException {
             if (url == null) {
                 return "";
@@ -218,6 +256,13 @@ public class NetworkInformation extends AppCompatActivity {
             return "";
         }
 
+        /**
+         * Reads a string from an input stream.
+         *
+         * @param inputStream - The InputStream to read from.
+         * @return - The complete string.
+         * @throws IOException - Thrown if there is an error while reading from the buffer.
+         */
         private String readFromStream(InputStream inputStream) throws IOException {
             if (inputStream == null) {
                 return "";
@@ -235,6 +280,12 @@ public class NetworkInformation extends AppCompatActivity {
             return output.toString();
         }
 
+        /**
+         * Retrieves public IP information (IP address, location) from a JSON string.
+         *
+         * @param IPJSON - The string to retrieve data from.
+         * @return - The newly created PublicIP object.
+         */
         private PublicIP extractFeatureFromJson(String IPJSON) {
             if (TextUtils.isEmpty(IPJSON)) {
                 return null;
@@ -255,6 +306,9 @@ public class NetworkInformation extends AppCompatActivity {
         }
     }
 
+    /**
+     * Structure for storing public addressing information (primarily location).
+     */
     public class PublicIP {
 
         private final String IP;

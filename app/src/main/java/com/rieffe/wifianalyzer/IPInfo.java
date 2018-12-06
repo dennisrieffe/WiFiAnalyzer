@@ -1,9 +1,8 @@
 package com.rieffe.wifianalyzer;
 
-/*
-Struct class for the network information
+/**
+ * Struct class for network information.
  */
-
 public class IPInfo {
 
     private String info;

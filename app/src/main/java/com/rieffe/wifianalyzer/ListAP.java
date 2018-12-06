@@ -1,10 +1,5 @@
 package com.rieffe.wifianalyzer;
 
-/*
-Within this class a broadcast receiver is used to scan for the wifi results which are then added to the APAdapter
- */
-
-
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,10 +17,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Contains a broadcast receiver which is used to scan for the Wi-Fi results. Scanning results are
+ * added to the APAdapter.
+ */
 public class ListAP extends AppCompatActivity {
 
     final ArrayList<AP> allAP = new ArrayList<>();
-    private @Nullable WifiManager wifiManager;
+    private @Nullable
+    WifiManager wifiManager;
     private APAdapter APAdapter;
 
     BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
@@ -49,8 +49,13 @@ public class ListAP extends AppCompatActivity {
         }
     };
 
-
-    //With the aid of Wifi Manager are the current available networks collected and sent to the APAdapter
+    /**
+     * Wi-Fi Manager is used to collect the current available networks. These networks are then
+     * sent to the APAdapter.
+     *
+     * @param savedInstanceState - The saved instance state; contains relevant Android setting
+     *                           values.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +78,9 @@ public class ListAP extends AppCompatActivity {
         ((ListView) findViewById(R.id.list)).setAdapter(APAdapter);
     }
 
-    //Method to initiate a new scan.
+    /**
+     * Initiates a new scan.
+     */
     private void startScan() {
         allAP.clear();
         registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));

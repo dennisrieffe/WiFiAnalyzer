@@ -1,9 +1,5 @@
 package com.rieffe.wifianalyzer;
 
-/*
-This class extends the ArrayAdapter class and overrides multiple methods to set lay out of different views for the available wifi networks.
- */
-
 import android.app.Activity;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
@@ -18,14 +14,24 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Optional;
 
-
-//This method sets the network information of one specific AP.
+/**
+ * Extends the ArrayAdapter class and overrides multiple methods to set the layout of
+ * different views for the available wifi networks.
+ */
 public class APAdapter extends ArrayAdapter<AP> {
 
     public APAdapter(Activity context, ArrayList<AP> AP) {
         super(context, 0, AP);
     }
 
+    /**
+     * Sets network information of one specific access point.
+     *
+     * @param position    - The position of the item.
+     * @param convertView - The view itself.
+     * @param parent      - The parent view group.
+     * @return - The modified view.
+     */
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View listItemView = Optional.ofNullable(convertView)
@@ -48,7 +54,12 @@ public class APAdapter extends ArrayAdapter<AP> {
         return listItemView;
     }
 
-    //A method to determine the color of the circle based on the RSSI
+    /**
+     * Determines the color of the circle label based on the RSSI
+     *
+     * @param RSSI - Relative signal strength
+     * @return - color value
+     */
     private int getRSSIColor(int RSSI) {
         int RSSIID;
 
@@ -73,7 +84,7 @@ public class APAdapter extends ArrayAdapter<AP> {
         } else {
             RSSIID = R.color.rssi10;
         }
-        
+
         return ContextCompat.getColor(getContext(), RSSIID);
     }
 

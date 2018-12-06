@@ -1,10 +1,5 @@
 package com.rieffe.wifianalyzer;
 
-
-/*
-This class extends the ArrayAdapter class and overrides multiple methods to set lay out of different views for the device information.
- */
-
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,15 +13,24 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Optional;
 
-
-//This method sets the device information, like current ip, DNS, etc.
-
+/**
+ * Extends the ArrayAdapter class and overrides multiple methods to set the layout of
+ * different views for device information.
+ */
 public class IPAdapter extends ArrayAdapter<IPInfo> {
 
     public IPAdapter(Activity context, ArrayList<IPInfo> task) {
         super(context, 0, task);
     }
 
+    /**
+     * Sets device information such as IP and DNS
+     *
+     * @param position    - The position of the item.
+     * @param convertView - The view itself.
+     * @param parent      - The parent view group.
+     * @return - The modified view.
+     */
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View listItemView = Optional.ofNullable(convertView)

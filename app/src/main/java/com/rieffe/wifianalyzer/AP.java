@@ -1,10 +1,8 @@
 package com.rieffe.wifianalyzer;
 
-/*
-Struct class for the available wifi access points
+/**
+ * Struct class for available Wi-Fi access points.
  */
-
-
 class AP {
     private final String BSSID;
     private final int RSSI;
